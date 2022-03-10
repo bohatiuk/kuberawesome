@@ -1,18 +1,48 @@
-<h2>Initialize master node from master.sh script</h2>
+<h1>Standalone mode</h1>
 
-<code>./master.sh $VERSION</code>
+<h2>master node</h2>
 
-$VERSION can be any valid package version in the format X.Y.Z-A
+<code>
+wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/standalone/master.sh -O ~/install.sh
 
-if script is ran without this parameter then latest version will be used
+~/install.sh 1.23.0-00
+</code>
 
-<h2>Initialize worker nodes from worker.sh script</h2>
+if script is ran without version parameter then the latest version will be used
+
+<h2>worker node</h2>
 
 On the stage "getting join command for worker" join command will be printed out which can be used like this
 
-<code>KUBEADM_JOIN_COMMAND=$COMMAND ./worker.sh $VERSION</code>
+<code>
+wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/worker.sh -O ~/install.sh
 
-<h3>Notes</h3>
+KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-cert-hash CA_HASH" ~/install.sh 1.23.0-00
+</code>
 
-Only 1 master any workers setup is supported. To join another master node:
-https://stackoverflow.com/questions/51126164/how-do-i-find-the-join-command-for-kubeadm-on-the-master
+<h1>HA mode</h1>
+<h2>master node</h2>
+
+<code>
+wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/ha/master_init.sh -O ~/install.sh
+
+~/install.sh 1.23.0-00
+</code>
+
+KUBEADM_JOIN_COMMAND will be outputed on "initializing cluster" stage
+
+<h2>other master nodes</h2>
+
+<code>
+wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/ha/master_join.sh -O ~/install.sh
+
+KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-cert-hash CA_HASH  --control-plane --certificate-key KEY" ~/install.sh 1.23.0-00
+</code>
+
+<h2>worker node</h2>
+
+<code>
+wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/worker.sh -O ~/install.sh
+
+KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-cert-hash CA_HASH" ~/install.sh 1.23.0-00
+</code>
