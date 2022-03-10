@@ -17,9 +17,15 @@ echo "$TXT--preflight checks$RST"
 echo "OS:"
 grep -i ubuntu /etc/issue
 if [ $? -ne 0 ]; then echo "${ERR}--ubuntu only supported--$RST"; exit 1; fi
-echo "${WARN}--following inbound ports must be open on the node: $PORTS--$RST"
-version="$1-00"
+echo "${WARN}--following inbound ports must be open on the node$RST"
+echo "$PORTS"
+echo "${WARN}following inbound ports must be open on the node--$RST"
+version="$1"
 if [ -z "$1" ]; then version="latest"; echo "--${WARN}kubernetes version not supplied, using latest--$RST"; fi
+if [ -z "$LB_ENDPOINT" ]; then echo "${ERR}--LB_ENDPOINT not specified--$RST"; exit 1; fi
+echo "${WARN}--installing net utils${RST}"
+sudo apt-get install -y net-tools
+echo "${WARN}installing net utils--${RST}"
 echo "preflight checks--$RST"
 
 echo "$TXT--disabling swap$RST"
@@ -51,7 +57,7 @@ echo $(systemctl status containerd)
 echo "${TXT}containerd status--$RST"
 
 echo "$TXT--installing kubelet, kubeadm, kubectl $RST"
-sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl
+sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl jq
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update
@@ -61,7 +67,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 echo "${TXT}installing kubelet, kubeadm, kubectl @$version--$RST"
 
 echo "$TXT--initializing cluster$RST"
-sudo kubeadm init
+sudo kubeadm init --control-plane-endpoint="$LB_ENDPOINT" --upload-certs --pod-network-cidr=10.244.0.0/16
 echo "${TXT}initializing cluster--$RST"
 
 echo "$TXT--saving default admin user kubeconfig to $HOME/.kube$RST"
@@ -71,19 +77,10 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 echo "${TXT}saving default admin user kubeconfig--$RST"
 
 echo "$TXT--installing weave-net CNI plugin$RST"
-echo "note: incoming port 6783 must be opened"
 wget https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n') -O ~/weave.yaml
 kubectl apply -f ~/weave.yaml
 
 echo "check status of weave via:"
 echo "kubectl exec -n kube-system WEAVE_MASTER weave -- /home/weave/weave --local status"
+echo "${WARN}--see: https://www.weave.works/docs/net/latest/troubleshooting--${RST}"
 echo "installing weave-net CNI plugin--$RST"
-
-echo "$TXT--adding bash completion$RST"
-kubectl completion bash
-echo "source <(kubectl completion bash)" >> ~/.bashrc
-echo "${TXT}adding bash completion--$RST"
-
-echo "$TXT--getting join command for worker$RST"
-kubeadm token create --print-join-command
-echo "${TXT}getting join command for worker--$RST"
