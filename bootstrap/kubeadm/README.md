@@ -26,7 +26,7 @@ KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-c
 <code>
 wget https://github.com/bohatiuk/kuberawesome/blob/main/bootstrap/kubeadm/ha/master_init.sh -O ~/install.sh
 
-~/install.sh 1.23.0-00
+LB_ENDPOINT="1.1.1.1:6443" ~/install.sh 1.23.0-00
 </code>
 
 KUBEADM_JOIN_COMMAND will be outputed on "initializing cluster" stage
