@@ -3,7 +3,7 @@
 <h2>master node</h2>
 
 <code>
-wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/standalone/master.sh -O ~/install.sh
+wget https://raw.githubusercontent.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/standalone/master.sh -O ~/install.sh && chmod +x ~/install.sh
 
 ~/install.sh 1.23.0-00
 </code>
@@ -15,7 +15,7 @@ if script is ran without version parameter then the latest version will be used
 On the stage "getting join command for worker" join command will be printed out which can be used like this
 
 <code>
-wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/worker.sh -O ~/install.sh
+wget https://raw.githubusercontent.com/bohatiuk/kubernetes/main/bootstrap/kubeadm/worker.sh -O ~/install.sh && chmod +x ~/install.sh
 
 KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-cert-hash CA_HASH" ~/install.sh 1.23.0-00
 </code>
@@ -24,9 +24,9 @@ KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-c
 <h2>master node</h2>
 
 <code>
-wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/ha/master_init.sh -O ~/install.sh
+wget https://raw.githubusercontent.com/bohatiuk/kubernetes/main/bootstrap/kubeadm/ha/master_init.sh -O ~/install.sh && chmod +x ~/install.sh
 
-~/install.sh 1.23.0-00
+LB_ENDPOINT="1.1.1.1:6443" ~/install.sh 1.23.0-00
 </code>
 
 KUBEADM_JOIN_COMMAND will be outputed on "initializing cluster" stage
@@ -34,7 +34,7 @@ KUBEADM_JOIN_COMMAND will be outputed on "initializing cluster" stage
 <h2>other master nodes</h2>
 
 <code>
-wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/ha/master_join.sh -O ~/install.sh
+wget https://raw.githubusercontent.com/bohatiuk/kubernetes/main/bootstrap/kubeadm/ha/master_join.sh -O ~/install.sh && chmod +x ~/install.sh
 
 KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-cert-hash CA_HASH  --control-plane --certificate-key KEY" ~/install.sh 1.23.0-00
 </code>
@@ -42,7 +42,7 @@ KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-c
 <h2>worker node</h2>
 
 <code>
-wget https://github.com/bohatiuk/kubernetes/blob/main/bootstrap/kubeadm/worker.sh -O ~/install.sh
+wget https://raw.githubusercontent.com/bohatiuk/kubernetes/main/bootstrap/kubeadm/worker.sh -O ~/install.sh && chmod +x ~/install.sh
 
 KUBEADM_JOIN_COMMAND="kubeadm join ENDPOINT --token TOKEN --discovery-token-ca-cert-hash CA_HASH" ~/install.sh 1.23.0-00
 </code>

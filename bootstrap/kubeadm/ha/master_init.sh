@@ -67,7 +67,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 echo "${TXT}installing kubelet, kubeadm, kubectl @$version--$RST"
 
 echo "$TXT--initializing cluster$RST"
-sudo kubeadm init --control-plane-endpoint="$LB_ENDPOINT" --upload-certs --pod-network-cidr=10.244.0.0/16
+sudo kubeadm init --control-plane-endpoint="$LB_ENDPOINT" --upload-certs
 echo "${TXT}initializing cluster--$RST"
 
 echo "$TXT--saving default admin user kubeconfig to $HOME/.kube$RST"
