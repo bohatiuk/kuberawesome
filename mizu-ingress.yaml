@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  name: mizu
+  namespace: mizu
+spec:
+  rules:
+  - host: mizu.bohati.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: mizu-api-server
+            port: 
+              number: 80
