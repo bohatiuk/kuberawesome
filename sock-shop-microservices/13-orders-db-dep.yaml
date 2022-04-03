@@ -15,6 +15,8 @@ spec:
     metadata:
       labels:
         name: orders-db
+        app: orders-db
+        version: v1
     spec:
       containers:
       - name: orders-db

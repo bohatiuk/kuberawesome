@@ -15,6 +15,8 @@ spec:
     metadata:
       labels:
         name: queue-master
+        app: queue-master
+        version: v1
     spec:
       containers:
       - name: queue-master

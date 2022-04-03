@@ -15,6 +15,8 @@ spec:
     metadata:
       labels:
         name: rabbitmq
+        app: rabbitmq
+        version: v1
       annotations:
         prometheus.io/scrape: "false"
     spec:

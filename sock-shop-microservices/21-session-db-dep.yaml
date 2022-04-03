@@ -15,6 +15,8 @@ spec:
     metadata:
       labels:
         name: session-db
+        app: session-db
+        version: v1
       annotations:
         prometheus.io.scrape: "false"
     spec:
